@@ -11,7 +11,6 @@ locals {
   rol_lab_arn                    = "arn:aws:iam::${var.id_cuenta_aws}:role/${var.nombre_rol_iam}"
   path_base_servicio_normalizado = length(trim(var.path_base_servicio, "/")) > 0 ? "/${trim(var.path_base_servicio, "/")}" : ""
   url_base_servicio              = "http://${module.compute.load_balancer_url}${local.path_base_servicio_normalizado}"
-  servidor_base_datos            = "jdbc:mysql://${var.host_base_datos}:3306/${var.nombre_base_datos}"
 }
 
 module "serverless" {
@@ -28,7 +27,8 @@ module "compute" {
   id_cuenta_aws          = var.id_cuenta_aws
   region_aws             = var.region
   nombre_repo_ecr        = var.nombre_repo_ecr
-  servidor_base_datos    = local.servidor_base_datos
+  host_base_datos        = var.host_base_datos
+  nombre_base_datos      = var.nombre_base_datos
   usuario_base_datos     = var.usuario_base_datos
   contrasenha_base_datos = var.contrasenha_base_datos
   nombre_servicio_ecs    = var.nombre_servicio_ecs

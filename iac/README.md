@@ -30,4 +30,9 @@ AWS_PROFILE=academy terraform destroy --var-file=main.tfvars
 
 Con esas variables, Terraform deriva automáticamente:
 - `url_base_servicio`: `http://<dns-alb><path_base_servicio>`
-- `servidor_base_datos`: `jdbc:mysql://<host_base_datos>:3306/<nombre_base_datos>`
+
+En ECS se inyectan estas variables de entorno para Spring Boot:
+- `DB_HOST`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`

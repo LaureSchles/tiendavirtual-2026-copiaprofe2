@@ -26,15 +26,19 @@ resource "aws_ecs_task_definition" "definicion_tarea_tienda_virtual" {
     memoryReservation = 1024,
     environment = [
       {
-        name  = "SPRING_DATASOURCE_URL"
-        value = var.servidor_base_datos
+        name  = "DB_HOST"
+        value = var.host_base_datos
       },
       {
-        name  = "SPRING_DATASOURCE_USERNAME"
+        name  = "DB_NAME"
+        value = var.nombre_base_datos
+      },
+      {
+        name  = "DB_USER"
         value = var.usuario_base_datos
       },
       {
-        name  = "SPRING_DATASOURCE_PASSWORD"
+        name  = "DB_PASSWORD"
         value = var.contrasenha_base_datos
       }
     ],
