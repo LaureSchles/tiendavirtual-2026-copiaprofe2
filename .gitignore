@@ -5,3 +5,15 @@ target
 *.iml
 *.ipr
 application.properties
+.terraform.lock.hcl
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.tfvars
+.terraform.tfvars.json
+*.log
+*.out
+*.err
+*.log.*
+*.out.*
+*.err.*
