@@ -10,16 +10,28 @@ data "archive_file" "archivo_merger_lambda" {
   output_path = "${path.root}/data/merger_lambda.zip"
 }
 
+locals {
+  ventas_sync_queue_name    = endswith(var.nombre_cola_sync_ventas, ".fifo") ? var.nombre_cola_sync_ventas : "${var.nombre_cola_sync_ventas}.fifo"
+  ventas_sync_dlq_name      = endswith(var.nombre_cola_sync_ventas, ".fifo") ? "${trimsuffix(var.nombre_cola_sync_ventas, ".fifo")}-dlq.fifo" : "${var.nombre_cola_sync_ventas}-dlq.fifo"
+  logistica_sync_queue_name = endswith(var.nombre_cola_sync_logistica, ".fifo") ? var.nombre_cola_sync_logistica : "${var.nombre_cola_sync_logistica}.fifo"
+  logistica_sync_dlq_name   = endswith(var.nombre_cola_sync_logistica, ".fifo") ? "${trimsuffix(var.nombre_cola_sync_logistica, ".fifo")}-dlq.fifo" : "${var.nombre_cola_sync_logistica}-dlq.fifo"
+}
+
 resource "aws_sqs_queue" "ventas_sync_dlq" {
-  name = "${var.nombre_cola_sync_ventas}-dlq"
+  name       = local.ventas_sync_dlq_name
+  fifo_queue = true
 }
 
 resource "aws_sqs_queue" "logistica_sync_dlq" {
-  name = "${var.nombre_cola_sync_logistica}-dlq"
+  name       = local.logistica_sync_dlq_name
+  fifo_queue = true
 }
 
 resource "aws_sqs_queue" "ventas_sync_queue" {
-  name                       = var.nombre_cola_sync_ventas
+  name                       = local.ventas_sync_queue_name
+  fifo_queue                 = true
+  deduplication_scope        = "messageGroup"
+  fifo_throughput_limit      = "perMessageGroupId"
   visibility_timeout_seconds = 120
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.ventas_sync_dlq.arn
@@ -28,7 +40,10 @@ resource "aws_sqs_queue" "ventas_sync_queue" {
 }
 
 resource "aws_sqs_queue" "logistica_sync_queue" {
-  name                       = var.nombre_cola_sync_logistica
+  name                       = local.logistica_sync_queue_name
+  fifo_queue                 = true
+  deduplication_scope        = "messageGroup"
+  fifo_throughput_limit      = "perMessageGroupId"
   visibility_timeout_seconds = 120
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.logistica_sync_dlq.arn

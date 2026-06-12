@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class VentasSyncPublisher {
@@ -42,12 +43,32 @@ public class VentasSyncPublisher {
                     "operation", operation,
                     "payload", payload
             ));
-            sqsClient.sendMessage(SendMessageRequest.builder()
+            SendMessageRequest.Builder requestBuilder = SendMessageRequest.builder()
                     .queueUrl(queueUrl)
-                    .messageBody(body)
-                    .build());
+                    .messageBody(body);
+
+            if (esColaFifo()) {
+                requestBuilder
+                        .messageGroupId(resolverMessageGroupId(entity, payload))
+                        .messageDeduplicationId(UUID.randomUUID().toString());
+            }
+
+            sqsClient.sendMessage(requestBuilder.build());
         } catch (JsonProcessingException ex) {
             throw new IllegalStateException("No se pudo serializar el evento para sincronizacion", ex);
         }
+    }
+
+    private boolean esColaFifo() {
+        return queueUrl.endsWith(".fifo");
+    }
+
+    private String resolverMessageGroupId(String entity, Map<String, Object> payload) {
+        Object idGrupo = Optional.ofNullable(payload.get("idOrden"))
+                .orElse(Optional.ofNullable(payload.get("idCarrito"))
+                        .orElse(Optional.ofNullable(payload.get("idCliente"))
+                                .orElse(Optional.ofNullable(payload.get("id"))
+                                        .orElse(payload.get("codigo")))));
+        return idGrupo != null ? entity + "-" + idGrupo : entity;
     }
 }
