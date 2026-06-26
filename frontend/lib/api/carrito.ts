@@ -25,8 +25,17 @@ type ItemCarritoRaw = {
 };
 
 function toDateOnly(value: Date | string): string {
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+    return value.trim();
+  }
   const date = typeof value === "string" ? new Date(value) : value;
   return date.toISOString().slice(0, 10);
+}
+
+function parseApiLocalDate(value: string): Date {
+  const isoDate = value.trim().slice(0, 10);
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
 function productoFallback(codigo: string): Producto {
@@ -44,7 +53,7 @@ function toCarritoModel(carritoRaw: CarritoRaw, productos: Producto[]): Carrito 
   const carrito = {
     id: carritoRaw.id,
     nombre: carritoRaw.nombre,
-    fecha: new Date(carritoRaw.fecha),
+    fecha: parseApiLocalDate(carritoRaw.fecha),
     cliente: {
       id: carritoRaw.cliente.id,
       dni: carritoRaw.cliente.dni,

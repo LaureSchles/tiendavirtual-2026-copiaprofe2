@@ -121,3 +121,18 @@ jobs:
         run: |
           aws ecs update-service --cluster tienda-virtual-cluster --service servicio-ventas --force-new-deployment
           aws ecs update-service --cluster tienda-virtual-cluster --service servicio-logistica --force-new-deployment
+
+      - name: Instalar dependencias Frontend
+        run: npm install
+        working-directory: frontend
+
+      - name: Compilar Frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Instalar Vercel CLI
+        run: npm install -g vercel
+
+      - name: Desplegar en Vercel
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
+        working-directory: frontend

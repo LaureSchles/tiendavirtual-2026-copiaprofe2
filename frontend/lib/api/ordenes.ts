@@ -37,8 +37,17 @@ type OrdenRaw = {
 };
 
 function toDateOnly(value: Date | string): string {
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value.trim())) {
+    return value.trim();
+  }
   const date = typeof value === "string" ? new Date(value) : value;
   return date.toISOString().slice(0, 10);
+}
+
+function parseApiLocalDate(value: string): Date {
+  const isoDate = value.trim().slice(0, 10);
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
 export function toIsoDateParam(fecha: string): string {
@@ -83,7 +92,7 @@ function toOrdenModel(ordenRaw: OrdenRaw, productos: Producto[]): Orden {
     carrito: {
       id: ordenRaw.carrito.id,
       nombre: ordenRaw.carrito.nombre,
-      fecha: new Date(ordenRaw.carrito.fecha),
+      fecha: parseApiLocalDate(ordenRaw.carrito.fecha),
       cliente: {
         id: ordenRaw.carrito.cliente.id,
         dni: ordenRaw.carrito.cliente.dni,
@@ -93,7 +102,7 @@ function toOrdenModel(ordenRaw: OrdenRaw, productos: Producto[]): Orden {
       },
       items: [],
     },
-    fecha: new Date(ordenRaw.fecha),
+    fecha: parseApiLocalDate(ordenRaw.fecha),
     subTotal: Number(ordenRaw.subTotal),
     igv: Number(ordenRaw.igv),
     total: Number(ordenRaw.total),
