@@ -14,8 +14,6 @@ jobs:
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
       AWS_REGION: ${{ vars.AWS_REGION }}
       AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
-      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
 
     steps:
       - name: Recuperar el código
@@ -135,14 +133,6 @@ jobs:
       - name: Instalar Vercel CLI
         run: npm install -g vercel
 
-      - name: Descargar configuración de proyecto Vercel
-        run: vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }}
-        working-directory: frontend
-
-      - name: Build en Vercel (prebuilt)
-        run: vercel build --prod --token ${{ secrets.VERCEL_TOKEN }}
-        working-directory: frontend
-
       - name: Desplegar en Vercel
-        run: vercel deploy --prebuilt --prod --token ${{ secrets.VERCEL_TOKEN }}
+        run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
         working-directory: frontend
