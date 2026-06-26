@@ -31,6 +31,8 @@ AWS_PROFILE=academy terraform destroy --var-file=main.tfvars
 - `nombre_rol_iam`: nombre del rol IAM para construir `arn:aws:iam::<id_cuenta_aws>:role/<nombre_rol_iam>`.
 - `path_base_servicio`: path base que se concatena a la URL del ALB para la Lambda (acepta `api` o `/api`).
 - `nombre_instancia_rds`: identificador de la instancia RDS MySQL.
+- `db_init_timeout_seconds`: timeout total (segundos) para esperar que RDS acepte conexiones SQL antes de fallar.
+- `db_init_retry_interval_seconds`: intervalo (segundos) entre reintentos de disponibilidad de RDS.
 - `esquema_ventas`, `esquema_logistica`, `esquema_tiendavirtual`: esquemas definidos en la misma instancia RDS.
 - `familia_tarea_ecs_ventas`, `familia_tarea_ecs_logistica`: familias de tarea para microservicios.
 - `nombre_repo_ecr`: repositorio ECR compartido.
@@ -43,6 +45,8 @@ Con esas variables, Terraform deriva automáticamente:
 Además, Terraform inicializa la base de datos ejecutando:
 - `backend-ventas/src/main/resources/sql/base-datos-ddl.sql`
 - `backend-ventas/src/main/resources/sql/base-datos-dml.sql`
+
+La inicialización espera disponibilidad de RDS con timeout determinístico. Si se supera `db_init_timeout_seconds` sin lograr `mysqladmin ping` + `SELECT 1`, el `apply` falla explícitamente para permitir reintento limpio.
 
 Defaults relevantes para sandbox:
 - DB identifier: `tiendavirtual`

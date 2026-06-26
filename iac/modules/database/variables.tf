@@ -52,3 +52,23 @@ variable "rds_publicly_accessible" {
   description = "Define si la instancia RDS sera publica"
   type        = bool
 }
+
+variable "db_init_timeout_seconds" {
+  description = "Tiempo maximo total para esperar disponibilidad de RDS antes de fallar"
+  type        = number
+
+  validation {
+    condition     = var.db_init_timeout_seconds > 0
+    error_message = "db_init_timeout_seconds debe ser mayor a 0."
+  }
+}
+
+variable "db_init_retry_interval_seconds" {
+  description = "Intervalo entre reintentos de disponibilidad de RDS"
+  type        = number
+
+  validation {
+    condition     = var.db_init_retry_interval_seconds > 0
+    error_message = "db_init_retry_interval_seconds debe ser mayor a 0."
+  }
+}
