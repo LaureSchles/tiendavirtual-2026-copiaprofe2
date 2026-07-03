@@ -46,6 +46,11 @@ variable "host_base_datos" {
   description = "Host DNS de la base de datos para la aplicación"
 }
 
+variable "puerto_base_datos" {
+  type        = number
+  description = "Puerto de la base de datos para la aplicación"
+}
+
 variable "nombre_base_datos_ventas" {
   type        = string
   description = "Nombre de esquema/base de datos para ventas"

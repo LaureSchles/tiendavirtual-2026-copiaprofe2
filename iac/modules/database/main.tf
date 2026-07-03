@@ -79,6 +79,13 @@ resource "null_resource" "inicializar_base_datos" {
 
         if [ "$now" -ge "$deadline" ]; then
           echo "ERROR: RDS no estuvo disponible tras $${timeout_seconds}s (intentos: $${intento})."
+          echo "Diagnóstico: host=$DB_HOST puerto=$DB_PORT usuario=$DB_USER"
+          if command -v getent >/dev/null 2>&1; then
+            echo "Resolución DNS:"
+            getent hosts "$DB_HOST" || true
+          fi
+          echo "Prueba SQL final:"
+          mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --protocol=TCP --connect-timeout=10 -e "SELECT 1" || true
           exit 1
         fi
 
@@ -87,8 +94,27 @@ resource "null_resource" "inicializar_base_datos" {
         sleep "$retry_interval_seconds"
       done
 
+      echo "Ejecutando script DDL: $DDL_SCRIPT"
       mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --protocol=TCP --connect-timeout=10 < "$DDL_SCRIPT"
+      echo "Ejecutando script DML: $DML_SCRIPT"
       mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --protocol=TCP --connect-timeout=10 < "$DML_SCRIPT"
+
+      echo "Validando esquemas requeridos (ventas, logistica)..."
+      schemas_encontrados=$(mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --protocol=TCP --connect-timeout=10 -Nse "
+        SELECT COUNT(*)
+        FROM information_schema.schemata
+        WHERE schema_name IN ('ventas', 'logistica');
+      ")
+      if [ "$schemas_encontrados" -ne 2 ]; then
+        echo "ERROR: No se encontraron ambos esquemas requeridos tras la inicialización."
+        mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --protocol=TCP --connect-timeout=10 -Nse "
+        SELECT schema_name
+        FROM information_schema.schemata
+        WHERE schema_name IN ('ventas', 'logistica')
+        ORDER BY schema_name;
+        " || true
+        exit 1
+      fi
     EOT
   }
 

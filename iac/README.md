@@ -55,6 +55,7 @@ Defaults relevantes para sandbox:
 
 En ECS se inyectan estas variables de entorno para Spring Boot:
 - `DB_HOST`
+- `DB_PORT`
 - `DB_NAME`
 - `DB_USER`
 - `DB_PASSWORD`

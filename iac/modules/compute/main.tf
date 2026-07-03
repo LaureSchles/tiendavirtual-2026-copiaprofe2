@@ -109,6 +109,10 @@ resource "aws_ecs_task_definition" "definicion_tarea_ventas" {
         value = var.host_base_datos
       },
       {
+        name  = "DB_PORT"
+        value = tostring(var.puerto_base_datos)
+      },
+      {
         name  = "DB_NAME"
         value = var.nombre_base_datos_ventas
       },
@@ -166,6 +170,10 @@ resource "aws_ecs_task_definition" "definicion_tarea_logistica" {
       {
         name  = "DB_HOST"
         value = var.host_base_datos
+      },
+      {
+        name  = "DB_PORT"
+        value = tostring(var.puerto_base_datos)
       },
       {
         name  = "DB_NAME"

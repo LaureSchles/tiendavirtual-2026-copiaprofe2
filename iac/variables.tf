@@ -117,7 +117,7 @@ variable "rds_publicly_accessible" {
 variable "db_init_timeout_seconds" {
   description = "Tiempo maximo total para esperar disponibilidad de RDS antes de fallar"
   type        = number
-  default     = 900
+  default     = 300
 }
 
 variable "db_init_retry_interval_seconds" {

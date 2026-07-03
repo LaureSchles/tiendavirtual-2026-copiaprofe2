@@ -55,6 +55,7 @@ module "compute" {
   tag_imagen_ventas             = var.tag_imagen_ventas
   tag_imagen_logistica          = var.tag_imagen_logistica
   host_base_datos               = module.database.rds_endpoint
+  puerto_base_datos             = module.database.rds_port
   nombre_base_datos_ventas      = var.esquema_ventas
   nombre_base_datos_logistica   = var.esquema_logistica
   usuario_base_datos            = var.usuario_base_datos
