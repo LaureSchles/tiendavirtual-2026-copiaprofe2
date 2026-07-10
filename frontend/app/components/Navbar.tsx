@@ -6,6 +6,7 @@ const links = [
   { href: "/clientes", label: "Clientes" },
   { href: "/carrito", label: "Carrito" },
   { href: "/ordenes", label: "Ordenes" },
+  { href: "/analitica_TAREA", label: "Analítica" },
 ];
 
 export default function Navbar() {

@@ -21,6 +21,11 @@ const cards = [
     title: "Ordenes",
     description: "Consulta ordenes y filtra por fecha.",
   },
+  {
+    href: "/analitica_TAREA",
+    title: "📊 Analítica",
+    description: "Dashboard de KPIs: ventas por mes, productos y clientes.",
+  },
 ];
 
 export default function Home() {
