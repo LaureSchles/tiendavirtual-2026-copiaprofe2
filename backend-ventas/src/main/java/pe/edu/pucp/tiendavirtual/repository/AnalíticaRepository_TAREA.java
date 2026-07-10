@@ -1,4 +1,4 @@
-package pe.edu.pucp.tiendavirtual.analitica_TAREA;
+package pe.edu.pucp.tiendavirtual.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

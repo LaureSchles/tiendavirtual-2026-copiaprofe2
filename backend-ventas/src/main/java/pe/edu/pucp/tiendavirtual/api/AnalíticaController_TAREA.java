@@ -1,9 +1,13 @@
-package pe.edu.pucp.tiendavirtual.analitica_TAREA;
+package pe.edu.pucp.tiendavirtual.api;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pe.edu.pucp.tiendavirtual.modelo.ProductoPorMesDTO_TAREA;
+import pe.edu.pucp.tiendavirtual.modelo.VentasPorClienteDTO_TAREA;
+import pe.edu.pucp.tiendavirtual.modelo.VentasPorMesDTO_TAREA;
+import pe.edu.pucp.tiendavirtual.service.AnalíticaService_TAREA;
 
 import java.util.List;
 

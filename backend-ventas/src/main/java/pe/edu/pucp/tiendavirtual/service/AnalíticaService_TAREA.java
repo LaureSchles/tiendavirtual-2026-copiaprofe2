@@ -1,6 +1,10 @@
-package pe.edu.pucp.tiendavirtual.analitica_TAREA;
+package pe.edu.pucp.tiendavirtual.service;
 
 import org.springframework.stereotype.Service;
+import pe.edu.pucp.tiendavirtual.modelo.ProductoPorMesDTO_TAREA;
+import pe.edu.pucp.tiendavirtual.modelo.VentasPorClienteDTO_TAREA;
+import pe.edu.pucp.tiendavirtual.modelo.VentasPorMesDTO_TAREA;
+import pe.edu.pucp.tiendavirtual.repository.AnalíticaRepository_TAREA;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
