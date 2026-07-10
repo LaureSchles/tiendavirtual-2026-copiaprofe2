@@ -263,3 +263,23 @@ resource "aws_apigatewayv2_route" "ordenes_delete_proxy" {
   route_key = "DELETE ${local.path_base_servicio_normalizado}/ordenes/{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.ordenes_integration.id}"
 }
+
+#########################################
+# Routes - Analitica (Dashboard _TAREA)
+#########################################
+
+# Integración: reenvía /api/analitica/* al ALB (backend-ventas en ECS)
+resource "aws_apigatewayv2_integration" "analitica_integration" {
+  api_id                 = aws_apigatewayv2_api.http_api.id
+  integration_type       = "HTTP_PROXY"
+  integration_uri        = "http://${var.load_balancer_url}${local.path_base_servicio_normalizado}/analitica/{proxy}"
+  integration_method     = "ANY"
+  payload_format_version = "1.0"
+}
+
+# Ruta: GET /api/analitica/{proxy+} → cubre ventas-por-mes, productos-por-mes, ventas-por-cliente
+resource "aws_apigatewayv2_route" "analitica_get" {
+  api_id    = aws_apigatewayv2_api.http_api.id
+  route_key = "GET ${local.path_base_servicio_normalizado}/analitica/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.analitica_integration.id}"
+}
