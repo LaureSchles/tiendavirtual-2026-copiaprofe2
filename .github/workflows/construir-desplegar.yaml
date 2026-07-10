@@ -135,4 +135,3 @@ jobs:
 
       - name: Desplegar en Vercel
         run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
-        working-directory: frontend
