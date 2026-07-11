@@ -1,4 +1,4 @@
-package pe.edu.pucp.tiendavirtual.analitica_TAREA;
+package pe.edu.pucp.tiendavirtual.modelo;
 
 /**
  * DTO para transportar los datos de productos vendidos por mes.

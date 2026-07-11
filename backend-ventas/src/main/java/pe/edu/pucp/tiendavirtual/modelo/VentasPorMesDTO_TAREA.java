@@ -1,4 +1,4 @@
-package pe.edu.pucp.tiendavirtual.analitica_TAREA;
+package pe.edu.pucp.tiendavirtual.modelo;
 
 import java.math.BigDecimal;
 
