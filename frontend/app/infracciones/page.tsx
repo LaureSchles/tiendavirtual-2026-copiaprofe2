@@ -35,7 +35,7 @@ export default function InfraccionesPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const nueva: Infraccion = {
-      id: Date.now(),
+      id: Math.max(...infracciones.map((i) => i.id)) + 1,
       placaVehiculo: form.placaVehiculo.toUpperCase(),
       tipoInfraccion: form.tipoInfraccion,
       montoMulta: Number(form.montoMulta),
