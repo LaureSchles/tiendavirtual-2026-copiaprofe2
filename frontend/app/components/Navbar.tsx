@@ -7,6 +7,7 @@ const links = [
   { href: "/carrito", label: "Carrito" },
   { href: "/ordenes", label: "Ordenes" },
   { href: "/analitica_TAREA", label: "Analítica" },
+  { href: "/infracciones", label: "Infracciones" },
 ];
 
 export default function Navbar() {
