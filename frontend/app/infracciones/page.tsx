@@ -51,6 +51,16 @@ export default function InfraccionesPage() {
   }
 
   return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header propio */}
+      <header className="bg-blue-700 px-6 py-4 shadow-md">
+        <div className="container mx-auto flex items-center gap-3">
+          <span className="text-2xl">🚦</span>
+          <h1 className="text-2xl font-bold text-white">Sistema de Infracciones de Tránsito</h1>
+        </div>
+      </header>
+
+      <main className="container mx-auto p-4 md:p-6">
     <section className="space-y-6">
       {/* Encabezado */}
       <header className="rounded-lg bg-white p-6 shadow flex items-center justify-between">
@@ -175,5 +185,7 @@ export default function InfraccionesPage() {
         </div>
       </div>
     </section>
+      </main>
+    </div>
   );
 }
